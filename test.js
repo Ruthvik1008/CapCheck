@@ -30,10 +30,30 @@ async function myScript() {
     if (await page.evaluate(() => window.find('You are admitted to The University of Texas at Austin'))) {
       console.log("You have been admitted")
     }
-    browser.close();
+    else{
+      console.log("No updates to your you")
+    }
   } catch (e) {
     console.log('Error: ', e.message)
   }
+
+await page.goto("https://utdirect.utexas.edu/apps/adm/mystatus/honors/");
+
+try{
+  await page.waitForNavigation;
+  if (await page.evaluate(() => window.find('accepted'))) {
+    console.log("you've been accepted into one or more program")
+  }
+  else{
+    console.log("there hasn't been an update yet")
+  }
+  browser.close()
+} catch(e){
+  console.log('Error: ', e.message)
+}
+
 };
+
+
 
 myScript()
