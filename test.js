@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 async function myScript() {
-  //launches pupeteer, change properties here
+  //launch pupeteer and change properties
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
@@ -19,41 +19,49 @@ async function myScript() {
   var username = credentials.username;
   var password = credentials.password;
 
-  //login
+  //enters credentials and clicks login
   await page.type('#IDToken1', username);
   await page.type('#IDToken2', password);
   await page.click('#login_btn');
   await page.waitForNavigation();
 
+  //gets information from the UTAustin website
   try {
     await page.waitForNavigation();
     if (await page.evaluate(() => window.find('You are admitted to The University of Texas at Austin'))) {
-      console.log("You have been admitted")
+      acceptanceText = await page.evaluate(() => document.querySelector('#APP04AR > h3').innerText)
+      console.log(acceptanceText)
+      console.log()
+      moreText = await page.evaluate(() => document.querySelector("#APP04AR > div > p").innerText)
+      console.log(moreText)
+      console.log()
+    }
+    else if(await page.evaluate(() => window.find("CAP"))) {
+      console.log("You've been invited to the CAP program. Please visit MyStatus to learn more.")
     }
     else{
-      console.log("No updates to your you")
+      console.log("No updates yet, please check back later")
     }
+    //NEED TO IMPLEMENT A CHECK FOR REJECTED 
   } catch (e) {
     console.log('Error: ', e.message)
   }
+  //opens honors program
+  await page.goto("https://utdirect.utexas.edu/apps/adm/mystatus/honors/");
 
-await page.goto("https://utdirect.utexas.edu/apps/adm/mystatus/honors/");
-
-try{
-  await page.waitForNavigation;
-  if (await page.evaluate(() => window.find('accepted'))) {
-    console.log("you've been accepted into one or more program")
+  try {
+    await page.waitForNavigation;
+    if (await page.evaluate(() => window.find('accepted'))) {
+      console.log("you've been accepted into one or more program")
+    }
+    else {
+      console.log("There hasn't been an update yet to your honors application")
+    }
+    //NEED TO IMPLEMENT FOR THOSE WHO ARE REJECTED
+    browser.close()
+  } catch (e) {
+    console.log('Error: ', e.message)
   }
-  else{
-    console.log("there hasn't been an update yet")
-  }
-  browser.close()
-} catch(e){
-  console.log('Error: ', e.message)
-}
-
 };
-
-
 
 myScript()
