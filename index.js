@@ -1,30 +1,23 @@
 const puppeteer = require('puppeteer');
 
-async function myScript() {
-  //launch pupeteer and change properties
+//TO BE IMPLEMENTED - some way to hash the password to keep credentials secure from attacks
+async function myScript(username, password) {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: null,
   });
 
   const page = await browser.newPage();
-  const path = require('path');
-  const fs = require('fs');
 
-  //creates path for the JSON file, which contains the credentials
-  const jsonPath = path.join(__dirname, 'credentials.JSON');
-  const credentials = JSON.parse(fs.readFileSync(jsonPath))
   const url = 'https://login.utexas.edu/login/cdcservlet?goto=https%3A%2F%2Futdirect.utexas.edu%3A443%2Fapps%2Fadm%2Fmystatus%2F&RequestID=1574821359911&MajorVersion=1&MinorVersion=0&ProviderID=https%3A%2F%2Futdirect.utexas.edu%3A443%2Famagent%3FRealm%3D%2Fadmin%2Futdirect-realm&IssueInstant=2019-11-27T02%3A22%3A39Z';
   await page.goto(url);
-  var username = credentials.username;
-  var password = credentials.password;
 
   //enters credentials and clicks login
   await page.type('#IDToken1', username);
   await page.type('#IDToken2', password);
   await page.click('#login_btn');
   await page.waitForNavigation();
-
+  
   //gets information from the UTAustin website
   try {
     await page.waitForNavigation();
@@ -46,7 +39,7 @@ async function myScript() {
   } catch (e) {
     console.log('Error: ', e.message)
   }
-  //opens honors program
+  //Honors Application Check
   await page.goto("https://utdirect.utexas.edu/apps/adm/mystatus/honors/");
 
   try {
@@ -62,6 +55,8 @@ async function myScript() {
   } catch (e) {
     console.log('Error: ', e.message)
   }
+  return acceptanceText;
 };
 
-myScript()
+//exports myScript to api 
+exports.myScript = myScript;
