@@ -4,6 +4,7 @@ const puppeteer = require('puppeteer');
 async function myScript(username, password) {
   const browser = await puppeteer.launch({
     headless: true,
+    args: ['--no-sandbox'],
     defaultViewport: null,
   });
 

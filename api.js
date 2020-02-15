@@ -4,7 +4,7 @@ const app = express()
 var tools = require('./index')
 var bodyParser = require('body-parser'); //used to parse JSON
 
-app.listen(process.env.PORT || 3000, () => console.log('listening on port 3000'));
+app.listen(process.env.PORT, () => console.log('listening on port 3000'));
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
