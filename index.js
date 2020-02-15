@@ -1,10 +1,9 @@
 const puppeteer = require('puppeteer');
-var bodyParser = require('body-parser'); //used to parse JSON
 
 //TO BE IMPLEMENTED - some way to hash the password to keep credentials secure from attacks
 async function myScript(username, password) {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: null,
   });
 
@@ -18,36 +17,23 @@ async function myScript(username, password) {
   await page.type('#IDToken2', password);
   await page.click('#login_btn');
   await page.waitForNavigation();
-
-  var jsonRes = {};
-  //TO BE IMPLEMENTED 
-  // await page.waitFor(4000)
-  // if (await page.evaluate(() => window.find('incorrect'))) {
-  //   console.log('works');
-  //   return "Your UT EID or password was incorrect. Please try again.";
-  // }
-
+  
   //gets information from the UTAustin website
   try {
     await page.waitForNavigation();
-
-
     if (await page.evaluate(() => window.find('You are admitted to The University of Texas at Austin'))) {
       acceptanceText = await page.evaluate(() => document.querySelector('#APP04AR > h3').innerText)
-      majorInfo = await page.evaluate(() => document.querySelector("#APP04AR > div > p").innerText)
-      var lastIndex = majorInfo.indexOf('major');
-      var major = majorInfo.substring(41, lastIndex);
-
-      jsonRes["normal-acceptance"] = acceptanceText;
-      jsonRes["major"] = major;
+      console.log(acceptanceText)
+      console.log()
+      moreText = await page.evaluate(() => document.querySelector("#APP04AR > div > p").innerText)
+      console.log(moreText)
+      console.log()
     }
-    else if (await page.evaluate(() => window.find("CAP"))) {
-      acceptanceText = "You've been invited to the CAP program. Please visit MyStatus to learn more.";
-      jsonRes["normal-acceptance"] = acceptanceText;
+    else if(await page.evaluate(() => window.find("CAP"))) {
+      console.log("You've been invited to the CAP program. Please visit MyStatus to learn more.")
     }
-    else {
-      acceptanceText = "No updates yet, please check back later";
-      jsonRes["normal-acceptance"] = acceptanceText;
+    else{
+      console.log("No updates yet, please check back later")
     }
     //NEED TO IMPLEMENT A CHECK FOR REJECTED 
   } catch (e) {
@@ -59,24 +45,17 @@ async function myScript(username, password) {
   try {
     await page.waitForNavigation;
     if (await page.evaluate(() => window.find('accepted'))) {
-      honorsStatus = "Congratulations! You've been accepted into one or more program.";
-      jsonRes["honors-acceptance"] = honorsStatus;
-    }
-    else if(await page.evaluate(() => window.find('not able to offer'))){
-      honorsStatus = "You have been rejected from one or more honors programs.";
-      jsonRes["honors-acceptance"] = honorsStatus;
+      console.log("you've been accepted into one or more program")
     }
     else {
-      honorsStatus = "There hasn't been an update yet to your honors application.";
-      jsonRes["honors-acceptance"] = honorsStatus;
+      console.log("There hasn't been an update yet to your honors application")
     }
     //NEED TO IMPLEMENT FOR THOSE WHO ARE REJECTED
-
+    browser.close()
   } catch (e) {
     console.log('Error: ', e.message)
   }
-  browser.close()
-  return jsonRes;
+  return acceptanceText;
 };
 
 //exports myScript to api 
