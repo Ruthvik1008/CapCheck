@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express()
 
-var tools = require('../index')
+var tools = require('./index')
 var bodyParser = require('body-parser'); //used to parse JSON
 
-app.listen(3000, () => console.log('listening on port 8000'));
+app.listen(3000, () => console.log('listening on port 3000'));
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));

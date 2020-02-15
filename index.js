@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 var bodyParser = require('body-parser'); //used to parse JSON
-//SEARCH TO BE IMPLEMENTED to find the improvemented needed
+
 //TO BE IMPLEMENTED - some way to hash the password to keep credentials secure from attacks
 async function myScript(username, password) {
   const browser = await puppeteer.launch({
@@ -21,7 +21,6 @@ async function myScript(username, password) {
 
   var jsonRes = {};
   //TO BE IMPLEMENTED 
-  //A CHECK IF WRONG USERNAME or PASSWORD
   // await page.waitFor(4000)
   // if (await page.evaluate(() => window.find('incorrect'))) {
   //   console.log('works');
@@ -50,7 +49,7 @@ async function myScript(username, password) {
       acceptanceText = "No updates yet, please check back later";
       jsonRes["normal-acceptance"] = acceptanceText;
     }
-    //CHECK IF REJECTED TO BE IMPLEMENTED
+    //NEED TO IMPLEMENT A CHECK FOR REJECTED 
   } catch (e) {
     console.log('Error: ', e.message)
   }
@@ -63,7 +62,7 @@ async function myScript(username, password) {
       honorsStatus = "Congratulations! You've been accepted into one or more program.";
       jsonRes["honors-acceptance"] = honorsStatus;
     }
-    else if (await page.evaluate(() => window.find('not able to offer'))) {
+    else if(await page.evaluate(() => window.find('not able to offer'))){
       honorsStatus = "You have been rejected from one or more honors programs.";
       jsonRes["honors-acceptance"] = honorsStatus;
     }
