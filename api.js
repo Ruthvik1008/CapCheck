@@ -11,13 +11,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 
 
-app.post ('/', async(request, response) => {
+app.post('/', async (request, response) => {
     username = request.body.username;
     password = request.body.password;
-    myRes = await tools.myScript(username,password);
+    myRes = await tools.myScript(username, password);
     console.log(myRes);
     response.send(myRes);
-    
+
 })
 
 
