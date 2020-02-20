@@ -4,7 +4,7 @@ var bodyParser = require('body-parser'); //used to parse JSON
 //TO BE IMPLEMENTED - some way to hash the password to keep credentials secure from attacks
 async function myScript(username, password) {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: null,
   });
 
