@@ -9,7 +9,7 @@ module.exports = async function (req, res) {
   password = req.body.password;
  
   const myres = await response(username, password);
-
+  res.statusCode = 200;
   res.send(myres);
 };
 
