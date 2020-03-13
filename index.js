@@ -29,9 +29,9 @@ app.post ('/', async(request, response) => {
       await page.type('#IDToken2', password);
       await page.click('#login_btn');
       await page.waitForNavigation();
-      await page.waitFor(2000);
       var jsonRes = {};
-      //TO BE IMPLEMENTED 
+
+      //Checks for correct username and password 
       verificationText = await page.evaluate(() => document.querySelector("loginForm > p").innerText);
       if (verificationText == "Your UT EID or password is incorrect") {
         console.log('works');
