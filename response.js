@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express()
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 var bodyParser = require('body-parser');
 
 async function getResponse(username, password) {
