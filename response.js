@@ -1,12 +1,13 @@
-const chrome = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer-core');
+const express = require('express');
+const app = express()
+const puppeteer = require('puppeteer');
 var bodyParser = require('body-parser');
 
 async function getResponse(username, password) {
     const browser = await puppeteer.launch({
-        headless: chrome.headless,
+        headless: true,
         defaultViewport: null,
-        args: chrome.args
+        args: ["--no-sandbox", "--disable-setuid-sandbox"]
       });
     
       const page = await browser.newPage();
