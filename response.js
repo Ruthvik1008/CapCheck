@@ -1,13 +1,12 @@
-const express = require('express');
-const app = express()
-const puppeteer = require('puppeteer');
+const chrome = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer-core');
 var bodyParser = require('body-parser');
 
 async function getResponse(username, password) {
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: chrome.headless,
         defaultViewport: null,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"]
+        args: chrome.args
       });
     
       const page = await browser.newPage();
@@ -79,6 +78,6 @@ async function getResponse(username, password) {
         console.log('Error: ', e.message)
       }
       browser.close();
-    response.send(jsonRes);   
+    return jsonRes;  
 }
 module.exports = getResponse;
