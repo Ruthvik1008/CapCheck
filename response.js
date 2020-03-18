@@ -3,7 +3,7 @@ const app = express()
 const puppeteer = require('puppeteer');
 var bodyParser = require('body-parser');
 
-async function response(username, password) {
+async function getResponse(username, password) {
     const browser = await puppeteer.launch({
         headless: true,
         defaultViewport: null,
@@ -81,4 +81,4 @@ async function response(username, password) {
       browser.close();
     response.send(jsonRes);   
 }
-module.exports = response;
+module.exports = getResponse;
