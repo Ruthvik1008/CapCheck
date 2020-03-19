@@ -1,5 +1,4 @@
 
-var bodyParser = require('body-parser'); //used to parse JSON
 const getResponse = require('../response');
 
 module.exports = async function (req, res) {
